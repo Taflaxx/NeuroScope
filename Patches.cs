@@ -6,7 +6,7 @@ namespace NeuroScope
 {
 
     [HarmonyPatch]
-    public class DialoguePatch
+    public class Patches
     {
 
         [HarmonyPostfix, HarmonyPatch(typeof(CharacterDialogueTree), nameof(CharacterDialogueTree.DisplayDialogueBox2))]
@@ -34,6 +34,14 @@ namespace NeuroScope
                 .SetForce(0, "Select a dialogue option.", "", false)
                 .AddAction(new Actions.CharacterDialogueOptionAction(__instance))
                 .Register();
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.OnPlayerDeath))]
+        public static void PlayerCameraEffectController_OnPlayerDeath_Postfix(DeathType deathType)
+        {
+            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>("Death").Equals("Disabled")) return;
+            NeuroSdk.Messages.Outgoing.Context.Send($"You died{(deathType.Equals(DeathType.Default) ? "" : $" from {deathType}")}",
+                !NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>("Death").Equals("Enabled"));
         }
     }
 }

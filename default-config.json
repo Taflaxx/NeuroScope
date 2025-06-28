@@ -2,7 +2,17 @@
   "$schema": "https://raw.githubusercontent.com/ow-mods/owml/master/schemas/config_schema.json",
   "enabled": true,
   "settings": {
+    "Websocket URL": "ws://localhost:8000",
     "Dialogue": {
+        "type": "selector",
+        "value": "Enabled",
+        "options": [
+            "Enabled",
+            "Enabled (Silent)",
+            "Disabled"
+        ]
+    },
+    "Death": {
         "type": "selector",
         "value": "Enabled",
         "options": [
