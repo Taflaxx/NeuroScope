@@ -41,6 +41,15 @@
     },
     "Notifications": {
       "type": "selector",
+      "value": "Enabled (Silent)",
+      "options": [
+        "Enabled",
+        "Enabled (Silent)",
+        "Disabled"
+      ]
+    },
+    "Location": {
+      "type": "selector",
       "value": "Enabled",
       "options": [
         "Enabled",

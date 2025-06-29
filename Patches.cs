@@ -1,6 +1,7 @@
 using System.Linq;
 using HarmonyLib;
 using NeuroSdk.Actions;
+using UnityEngine;
 
 namespace NeuroScope
 {
@@ -57,12 +58,34 @@ namespace NeuroScope
                 $"{Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "name")} - " +
                 $"{Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "desc")}");
         }
-        
+
         [HarmonyPrefix, HarmonyPatch(typeof(NotificationManager), nameof(NotificationManager.PostNotification))]
         public static void NotificationManager_PostNotification_Prefix(NotificationManager __instance, NotificationData data)
         {
             if (__instance._pinnedNotifications.Contains(data)) return; // Don't send duplicate notifications
             Utils.sendContext("Notifications", $"[NOTIFICATION] {data.displayMessage}");
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(Sector), nameof(Sector.OnEntry))]
+        public static void Sector_OnEntry_Prefix(Sector __instance, GameObject hitObj)
+        {
+            SectorDetector component = hitObj.GetComponent<SectorDetector>();
+            if (component == null) return;
+            if (component.GetOccupantType() != DynamicOccupant.Player) return;
+            string sectorName = Utils.sectorToString(__instance);
+            if (sectorName == null) return;
+            Utils.sendContext("Location", $"[LOCATION] Player entered {sectorName}");
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(Sector), nameof(Sector.OnExit))]
+        public static void Sector_OnExit_Prefix(Sector __instance, GameObject hitObj)
+        {
+            SectorDetector component = hitObj.GetComponent<SectorDetector>();
+            if (component == null) return;
+            if (component.GetOccupantType() != DynamicOccupant.Player) return;
+            string sectorName = Utils.sectorToString(__instance);
+            if (sectorName == null) return;
+            Utils.sendContext("Location", $"[LOCATION] Player left {sectorName}");
         }
     }
 }
