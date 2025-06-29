@@ -1,6 +1,7 @@
 using System.Linq;
 using HarmonyLib;
 using NeuroSdk.Actions;
+using OWML.ModHelper.Events;
 using UnityEngine;
 
 namespace NeuroScope
@@ -30,7 +31,7 @@ namespace NeuroScope
 
             // If there are DialogueOptions, let Neuro choose an option
             ActionWindow.Create(__result._optionBox)
-                .SetForce(0, "Select a dialogue option.", "", false)
+                .SetForce(NeuroScope.Instance.ModHelper.Config.GetSettingsValue<int>("Dialogue Force Timer"), "Select a dialogue option.", "", false)
                 .AddAction(new Actions.CharacterDialogueOptionAction(__instance))
                 .Register();
         }

@@ -12,6 +12,10 @@
         "Disabled"
       ]
     },
+    "Dialogue Force Timer": {
+      "type": "number",
+      "value": 30
+    },
     "Nomai Writing": {
       "type": "selector",
       "value": "Enabled",
