@@ -49,5 +49,13 @@ namespace NeuroScope
         {
             Utils.sendContext("Death", $"You died{(deathType.Equals(DeathType.Default) ? "" : $" - Cause: {deathType}")}");
         }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(Steamworks.SteamUserStats), nameof(Steamworks.SteamUserStats.SetAchievement))]
+        public static void SteamUserStats_SetAchievement_Postfix(string pchName)
+        {
+            Utils.sendContext("Achievements", $"Achievement Unlocked: " +
+                $"{ Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "name")} - " +
+                $"{ Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "desc")}");
+        }
     }
 }

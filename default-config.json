@@ -4,31 +4,40 @@
   "settings": {
     "Websocket URL": "",
     "Dialogue": {
-        "type": "selector",
-        "value": "Enabled",
-        "options": [
-            "Enabled",
-            "Enabled (Silent)",
-            "Disabled"
-        ]
+      "type": "selector",
+      "value": "Enabled",
+      "options": [
+        "Enabled",
+        "Enabled (Silent)",
+        "Disabled"
+      ]
     },
     "Nomai Writing": {
-        "type": "selector",
-        "value": "Enabled",
-        "options": [
-            "Enabled",
-            "Enabled (Silent)",
-            "Disabled"
-        ]
+      "type": "selector",
+      "value": "Enabled",
+      "options": [
+        "Enabled",
+        "Enabled (Silent)",
+        "Disabled"
+      ]
     },
     "Death": {
-        "type": "selector",
-        "value": "Enabled",
-        "options": [
-            "Enabled",
-            "Enabled (Silent)",
-            "Disabled"
-        ]
+      "type": "selector",
+      "value": "Enabled",
+      "options": [
+          "Enabled",
+          "Enabled (Silent)",
+          "Disabled"
+      ]
+    },
+    "Achievements": {
+      "type": "selector",
+      "value": "Enabled",
+      "options": [
+        "Enabled",
+        "Enabled (Silent)",
+        "Disabled"
+      ]
     }
   }
 }
