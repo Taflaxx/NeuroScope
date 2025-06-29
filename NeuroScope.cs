@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using NeuroSdk.Actions;
 using OWML.Common;
 using OWML.ModHelper;
 using System.Reflection;
@@ -30,6 +31,7 @@ public class NeuroScope : ModBehaviour
 
 		System.Environment.SetEnvironmentVariable("NEURO_SDK_WS_URL", "ws://localhost:8000");
 		NeuroSdk.NeuroSdkSetup.Initialize("Outer Wilds");
+		NeuroActionHandler.RegisterActions(new GetPlayerStatusAction());
 	}
 
 	public void OnCompleteSceneLoad(OWScene previousScene, OWScene newScene)
