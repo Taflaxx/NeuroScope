@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,6 +22,12 @@ namespace NeuroScope
         public static string stripHtml(string text)
         {
             return Regex.Replace(text, "<.*?>", System.String.Empty);
+        }
+
+        public static void sendContext(string settingsKey, string text)
+        {
+            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>(settingsKey).Equals("Disabled")) return;
+            NeuroSdk.Messages.Outgoing.Context.Send(text, !NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>(settingsKey).Equals("Enabled"));
         }
     }
 }
