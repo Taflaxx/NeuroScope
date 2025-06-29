@@ -64,6 +64,7 @@ namespace NeuroScope
         [HarmonyPrefix, HarmonyPatch(typeof(NotificationManager), nameof(NotificationManager.PostNotification))]
         public static void NotificationManager_PostNotification_Prefix(NotificationManager __instance, NotificationData data)
         {
+            if (!PlayerState.IsWearingSuit() || !PlayerState.IsInsideShip()) return; // Notifications are only shown when the player is wearing the spacesuit or inside the ship
             if (__instance._pinnedNotifications.Contains(data)) return; // Don't send duplicate notifications
             Utils.sendContext("Notifications", $"[NOTIFICATION] {data.displayMessage}");
         }
