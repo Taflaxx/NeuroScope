@@ -12,9 +12,11 @@ namespace NeuroScope
         {
             string text = characterDialogueTree._currentNode._name + characterDialogueTree._currentNode._listPagesToDisplay[characterDialogueTree._currentNode._currentPage];
             text = TextTranslation.Translate(text).Trim();
-            if (characterDialogueTree._characterName != "")
+            if (characterDialogueTree._characterName == "SIGN") {
+                text = $"[SIGN] {text}";
+            } else if (characterDialogueTree._characterName != "")
             {
-                text = $"{TextTranslation.Translate(characterDialogueTree._characterName)}: {text}";
+                text = $"[DIALOGUE] {TextTranslation.Translate(characterDialogueTree._characterName)}: {text}";
             }
             return stripHtml(text);
         }
@@ -27,7 +29,7 @@ namespace NeuroScope
         public static void sendContext(string settingsKey, string text)
         {
             if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>(settingsKey).Equals("Disabled")) return;
-            NeuroSdk.Messages.Outgoing.Context.Send(text, !NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>(settingsKey).Equals("Enabled"));
+            NeuroSdk.Messages.Outgoing.Context.Send(stripHtml(text), !NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>(settingsKey).Equals("Enabled"));
         }
     }
 }

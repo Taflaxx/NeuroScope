@@ -38,6 +38,15 @@
         "Enabled (Silent)",
         "Disabled"
       ]
+    },
+    "Notifications": {
+      "type": "selector",
+      "value": "Enabled",
+      "options": [
+        "Enabled",
+        "Enabled (Silent)",
+        "Disabled"
+      ]
     }
   }
 }

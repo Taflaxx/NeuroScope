@@ -41,7 +41,7 @@ namespace NeuroScope
             if (!__instance._dictNomaiTextData.ContainsKey(id)) return;
             if (__instance._dictNomaiTextData[id].IsTranslated) return;
 
-            Utils.sendContext("Nomai Writing", $"Translated Nomai Writing: {Utils.stripHtml(__instance._dictNomaiTextData[id].TextNode.InnerText)}");
+            Utils.sendContext("Nomai Writing", $"[NOMAI WRITING] {__instance._dictNomaiTextData[id].TextNode.InnerText}");
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.OnPlayerDeath))]
@@ -53,9 +53,16 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(Steamworks.SteamUserStats), nameof(Steamworks.SteamUserStats.SetAchievement))]
         public static void SteamUserStats_SetAchievement_Postfix(string pchName)
         {
-            Utils.sendContext("Achievements", $"Achievement Unlocked: " +
-                $"{ Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "name")} - " +
-                $"{ Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "desc")}");
+            Utils.sendContext("Achievements", $"[ACHIEVEMENT UNLOCKED] " +
+                $"{Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "name")} - " +
+                $"{Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "desc")}");
+        }
+        
+        [HarmonyPrefix, HarmonyPatch(typeof(NotificationManager), nameof(NotificationManager.PostNotification))]
+        public static void NotificationManager_PostNotification_Prefix(NotificationManager __instance, NotificationData data)
+        {
+            if (__instance._pinnedNotifications.Contains(data)) return; // Don't send duplicate notifications
+            Utils.sendContext("Notifications", $"[NOTIFICATION] {data.displayMessage}");
         }
     }
 }
