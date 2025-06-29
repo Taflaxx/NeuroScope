@@ -51,9 +51,11 @@ namespace NeuroScope
             Utils.sendContext("Death", $"You died{(deathType.Equals(DeathType.Default) ? "" : $" - Cause: {deathType}")}");
         }
 
-        [HarmonyPostfix, HarmonyPatch(typeof(Steamworks.SteamUserStats), nameof(Steamworks.SteamUserStats.SetAchievement))]
-        public static void SteamUserStats_SetAchievement_Postfix(string pchName)
+        [HarmonyPrefix, HarmonyPatch(typeof(Steamworks.SteamUserStats), nameof(Steamworks.SteamUserStats.SetAchievement))]
+        public static void SteamUserStats_SetAchievement_Prefix(string pchName)
         {
+            Steamworks.SteamUserStats.GetAchievement(pchName, out bool achieved);
+            if (achieved) return; // Make sure achievement is not already unlocked
             Utils.sendContext("Achievements", $"[ACHIEVEMENT UNLOCKED] " +
                 $"{Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "name")} - " +
                 $"{Steamworks.SteamUserStats.GetAchievementDisplayAttribute(pchName, "desc")}");
