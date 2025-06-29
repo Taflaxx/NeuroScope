@@ -36,6 +36,18 @@ namespace NeuroScope
                 .Register();
         }
 
+        [HarmonyPrefix, HarmonyPatch(typeof(NomaiText), nameof(NomaiText.SetAsTranslated))]
+        public static void NomaiText_SetAsTranslated_Prefix(NomaiText __instance, int id)
+        {
+            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>("Nomai Writing").Equals("Disabled")) return;
+            __instance.VerifyInitialized();
+            if (!__instance._dictNomaiTextData.ContainsKey(id)) return;
+            if (__instance._dictNomaiTextData[id].IsTranslated) return;
+
+            NeuroSdk.Messages.Outgoing.Context.Send($"Nomai Writing - {Utils.stripHtml(__instance._dictNomaiTextData[id].TextNode.InnerText)}",
+                !NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>("Nomai Writing").Equals("Enabled"));
+        }
+
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.OnPlayerDeath))]
         public static void PlayerCameraEffectController_OnPlayerDeath_Postfix(DeathType deathType)
         {
