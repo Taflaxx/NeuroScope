@@ -18,8 +18,11 @@ namespace NeuroScope
                 return;
             }
 
-            // Make sure old CharacterDialogueOptionActions are removed
-            NeuroActionHandler.UnregisterActions("dialogue_option");
+            // Make sure old CharacterDialogueOptionActions are 
+            if (NeuroActionHandler.GetRegistered("dialogue_option") != null)
+            {
+                NeuroActionHandler.UnregisterActions("dialogue_option");
+            }
 
             // If there are no DialogueOptions we can just send the text as Context
             if (!__result._displayedOptions.Any())
