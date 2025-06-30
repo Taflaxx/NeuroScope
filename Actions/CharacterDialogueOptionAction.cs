@@ -16,10 +16,10 @@ namespace NeuroScope.Actions
         private readonly CharacterDialogueTree _characterDialogueTree;
         private readonly List<string> _options;
 
-        public CharacterDialogueOptionAction(CharacterDialogueTree dialogueBox)
+        public CharacterDialogueOptionAction(CharacterDialogueTree characterDialogueTree, DialogueBoxVer2 dialogueBox)
         {
-            _characterDialogueTree = dialogueBox;
-            _options = _characterDialogueTree._currentDialogueBox._displayedOptions.Select(option => Utils.stripHtml(option._text)).ToList();
+            _characterDialogueTree = characterDialogueTree;
+            _options = dialogueBox._displayedOptions.Select(option => Utils.stripHtml(option._text)).ToList();
         }
 
         protected override JsonSchema Schema => new()

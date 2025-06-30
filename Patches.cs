@@ -10,6 +10,17 @@ namespace NeuroScope
     [HarmonyPatch]
     public class Patches
     {
+        /// <summary>
+        /// This finalizer makes sure that any exceptions in the CharacterDialogueTree.DisplayDialogueBox2 Patch are suppressed.
+        /// Otherwise, the dialogue would get stuck and the game would need to be restarted.
+        /// </summary>
+        [HarmonyFinalizer, HarmonyPatch(typeof(CharacterDialogueTree), nameof(CharacterDialogueTree.DisplayDialogueBox2))]
+        public static System.Exception Finalizer(System.Exception __exception)
+        {
+            if (__exception == null) return null; // No exception, nothing to do
+            NeuroScope.Instance.ModHelper.Console.WriteLine($"[NeuroScope] Exception in CharacterDialogueTree: {__exception.Message}\n{__exception.StackTrace}");
+            return null;
+        }
 
         [HarmonyPostfix, HarmonyPatch(typeof(CharacterDialogueTree), nameof(CharacterDialogueTree.DisplayDialogueBox2))]
         public static void CharacterDialogueTree_DisplayDialogueBox2_Postfix(CharacterDialogueTree __instance, DialogueBoxVer2 __result)
@@ -32,7 +43,7 @@ namespace NeuroScope
             // If there are DialogueOptions, let Neuro choose an option
             ActionWindow.Create(__result._optionBox)
                 .SetForce(NeuroScope.Instance.ModHelper.Config.GetSettingsValue<int>("Dialogue Force Timer"), "Select a dialogue option.", "", false)
-                .AddAction(new Actions.CharacterDialogueOptionAction(__instance))
+                .AddAction(new Actions.CharacterDialogueOptionAction(__instance, __result))
                 .Register();
         }
 
