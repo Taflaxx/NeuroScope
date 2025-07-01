@@ -57,10 +57,22 @@ namespace NeuroScope
             Utils.sendContext("Nomai Writing", $"[NOMAI WRITING] {__instance._dictNomaiTextData[id].TextNode.InnerText}");
         }
 
+        [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.WakeUp))]
+        public static void PlayerCameraEffectController_WakeUp_Postfix()
+        {
+             Utils.sendContext("Death", $"You woke up");
+		    NeuroActionHandler.RegisterActions(new GetPlayerStatusAction(), new GetShipStatusAction());
+        }
+
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.OnPlayerDeath))]
         public static void PlayerCameraEffectController_OnPlayerDeath_Postfix(DeathType deathType)
         {
             Utils.sendContext("Death", $"You died{(deathType.Equals(DeathType.Default) ? "" : $" - Cause: {deathType}")}");
+
+            // Unregister all Actions
+            NeuroActionHandler.UnregisterActions("dialogue_option");
+            NeuroActionHandler.UnregisterActions("get_player_status");
+            NeuroActionHandler.UnregisterActions("get_ship_status");
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(Steamworks.SteamUserStats), nameof(Steamworks.SteamUserStats.SetAchievement))]
