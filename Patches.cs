@@ -95,12 +95,22 @@ namespace NeuroScope
         [HarmonyPrefix, HarmonyPatch(typeof(Sector), nameof(Sector.OnExit))]
         public static void Sector_OnExit_Prefix(Sector __instance, GameObject hitObj)
         {
+            if (PlayerState.IsDead()) return;
             SectorDetector component = hitObj.GetComponent<SectorDetector>();
             if (component == null) return;
             if (component.GetOccupantType() != DynamicOccupant.Player) return;
             string sectorName = Utils.sectorToString(__instance);
             if (sectorName == null) return;
             Utils.sendContext("Location", $"[LOCATION] Player left {sectorName}");
+        }
+    
+        [HarmonyPrefix, HarmonyPatch(typeof(ShipLogFact), nameof(ShipLogFact.Reveal))]
+        public static void ShipLogFact_Reveal_Prefix(ShipLogFact __instance)
+        {
+            if (__instance.IsRevealed()) return; // Make sure we only send the fact once
+            ShipLogEntry shipLogEntry = Locator.GetShipLogManager().GetEntry(__instance._entryID);
+            string astroObjectName = AstroObject.AstroObjectNameToString(AstroObject.StringIDToAstroObjectName(shipLogEntry._astroObjectID));
+            Utils.sendContext("Ship Log Fact", $"[NEW SHIP LOG FACT] {astroObjectName} - {shipLogEntry.GetName(false)}: {__instance.GetText()}");
         }
     }
 }

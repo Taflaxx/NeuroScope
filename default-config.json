@@ -25,6 +25,15 @@
         "Disabled"
       ]
     },
+    "Ship Log Fact": {
+      "type": "selector",
+      "value": "Enabled",
+      "options": [
+        "Enabled",
+        "Enabled (Silent)",
+        "Disabled"
+      ]
+    },
     "Death": {
       "type": "selector",
       "value": "Enabled",
