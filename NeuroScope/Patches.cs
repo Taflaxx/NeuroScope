@@ -30,7 +30,7 @@ namespace NeuroScope
         {
             if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<string>("Dialogue").Equals("Disabled")) return;
 
-            // Make sure old CharacterDialogueOptionActions are 
+            // Make sure old CharacterDialogueOptionActions are unregistered
             if (NeuroActionHandler.GetRegistered("dialogue_option") != null)
             {
                 NeuroActionHandler.UnregisterActions("dialogue_option");
@@ -128,12 +128,9 @@ namespace NeuroScope
             Utils.sendContext("Ship Log Fact", $"[NEW SHIP LOG FACT] {astroObjectName} - {shipLogEntry.GetName(false)}: {__instance.GetText()}");
         }
 
-
-
         [HarmonyPostfix, HarmonyPatch(typeof(SignalscopeUI), nameof(SignalscopeUI.UpdateLabels))]
         public static void SignalscopeUI_UpdateLabels_Postfix(SignalscopeUI __instance)
         {
-
             AudioSignal strongestSignal = __instance._signalscopeTool.GetStrongestSignal();
             if (_lastSignal == strongestSignal && Time.time - _lastSignalTime < 10f) return;
             if (strongestSignal == null || strongestSignal.GetSignalStrength() < 0.9f) return;
