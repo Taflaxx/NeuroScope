@@ -11,6 +11,10 @@ NeuroScope is an Outer Wilds mod that provides real-time game context and action
 
 ## Installation
 1. Install the [Outer Wilds Mod Manager](https://outerwildsmods.com/mod-manager/)
+2. Download the lastest release of the mod
+3. In the Mod Manager select "Install from" -> "Zip File" and select the zip file of the mod
+4. Start the game using the Mod Manager and set the websocket URL
+5. Restart the game
 
 
 ## Configuration
