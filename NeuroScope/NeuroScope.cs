@@ -1,12 +1,10 @@
-﻿using HarmonyLib;
-using NeuroSdk.Actions;
+﻿using System.Reflection;
+using HarmonyLib;
 using OWML.Common;
-using OWML.ModHelper;
-using System.Reflection;
 
 namespace NeuroScope;
 
-public class NeuroScope : ModBehaviour
+public class NeuroScope : OWML.ModHelper.ModBehaviour
 {
 	public static NeuroScope Instance;
 
