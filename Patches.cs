@@ -1,7 +1,6 @@
 using System.Linq;
 using HarmonyLib;
 using NeuroSdk.Actions;
-using OWML.ModHelper.Events;
 using UnityEngine;
 
 namespace NeuroScope
@@ -10,6 +9,10 @@ namespace NeuroScope
     [HarmonyPatch]
     public class Patches
     {
+
+        private static float _lastSignalTime = -10f;
+        private static AudioSignal _lastSignal = null;
+        
         /// <summary>
         /// This finalizer makes sure that any exceptions in the CharacterDialogueTree.DisplayDialogueBox2 Patch are suppressed.
         /// Otherwise, the dialogue would get stuck and the game would need to be restarted.
@@ -60,8 +63,8 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.WakeUp))]
         public static void PlayerCameraEffectController_WakeUp_Postfix()
         {
-             Utils.sendContext("Death", $"You woke up");
-		    NeuroActionHandler.RegisterActions(new GetPlayerStatusAction(), new GetShipStatusAction());
+            Utils.sendContext("Death", $"You woke up");
+            NeuroActionHandler.RegisterActions(new GetPlayerStatusAction(), new GetShipStatusAction());
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.OnPlayerDeath))]
@@ -115,7 +118,7 @@ namespace NeuroScope
             if (sectorName == null) return;
             Utils.sendContext("Location", $"[LOCATION] Player left {sectorName}");
         }
-    
+
         [HarmonyPrefix, HarmonyPatch(typeof(ShipLogFact), nameof(ShipLogFact.Reveal))]
         public static void ShipLogFact_Reveal_Prefix(ShipLogFact __instance)
         {
@@ -123,6 +126,21 @@ namespace NeuroScope
             ShipLogEntry shipLogEntry = Locator.GetShipLogManager().GetEntry(__instance._entryID);
             string astroObjectName = AstroObject.AstroObjectNameToString(AstroObject.StringIDToAstroObjectName(shipLogEntry._astroObjectID));
             Utils.sendContext("Ship Log Fact", $"[NEW SHIP LOG FACT] {astroObjectName} - {shipLogEntry.GetName(false)}: {__instance.GetText()}");
+        }
+
+
+
+        [HarmonyPostfix, HarmonyPatch(typeof(SignalscopeUI), nameof(SignalscopeUI.UpdateLabels))]
+        public static void SignalscopeUI_UpdateLabels_Postfix(SignalscopeUI __instance)
+        {
+
+            AudioSignal strongestSignal = __instance._signalscopeTool.GetStrongestSignal();
+            if (_lastSignal == strongestSignal && Time.time - _lastSignalTime < 10f) return;
+            if (strongestSignal == null || strongestSignal.GetSignalStrength() < 0.9f) return;
+            string text = PlayerData.KnowsSignal(strongestSignal.GetName()) ? AudioSignal.SignalNameToString(strongestSignal.GetName()) : UITextLibrary.GetString(UITextType.UnknownSignal);
+            Utils.sendContext("Signalscope", $"[SIGNALSCOPE] Listening to Signal: '{text}' | Distance: {Mathf.Round(strongestSignal.GetDistanceFromScope())}m | Frequency: '{AudioSignal.FrequencyToString(strongestSignal._frequency, false)}'");
+            _lastSignalTime = Time.time;
+            _lastSignal = strongestSignal;
         }
     }
 }

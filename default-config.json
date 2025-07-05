@@ -69,6 +69,15 @@
         "Enabled (Silent)",
         "Disabled"
       ]
+    },
+    "Signalscope": {
+      "type": "selector",
+      "value": "Enabled (Silent)",
+      "options": [
+        "Enabled",
+        "Enabled (Silent)",
+        "Disabled"
+      ]
     }
   }
 }
