@@ -4,8 +4,8 @@ NeuroScope is an Outer Wilds mod that provides real-time game context and action
 
 ## Features
 
-- Sends player and ship status updates to Neuro
-- Shares dialogue and dialogue options and allows Neuro to respond
+- Allows Neuro to read the ship and player status
+- Shares nomai writing, dialogue and dialogue options and allows Neuro to respond
 - Notifies Neuro of achievements, notifications, ship log facts and signalscope scans
 - Track player location
 
