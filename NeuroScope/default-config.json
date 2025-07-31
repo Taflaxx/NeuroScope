@@ -5,7 +5,7 @@
     "Websocket URL": "",
     "Dialogue": {
       "type": "selector",
-      "value": "Enabled",
+      "value": "Disabled",
       "options": [
         "Enabled",
         "Enabled (Silent)",
@@ -18,7 +18,7 @@
     },
     "Nomai Writing": {
       "type": "selector",
-      "value": "Enabled",
+      "value": "Disabled",
       "options": [
         "Enabled",
         "Enabled (Silent)",
