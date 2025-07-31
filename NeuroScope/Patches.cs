@@ -156,22 +156,9 @@ namespace NeuroScope
                 case "PlayerEnterBlackHole":
                     Utils.sendContext("Location", "[LOCATION] Player entered a Black Hole");
                     break;
-                case "EnterRoastingMode":
-                    Utils.sendContext("Event", "Player started roasting marshmallows");
-                    break;
-                case "ExitRoastingMode":
-                    Utils.sendContext("Event", "Player stopped roasting marshmallows");
-                    break;
-                case "StartSleepingAtCampfire":
-                    Utils.sendContext("Event", "Player started sleeping at the campfire");
-                    break;
-                case "StopSleepingAtCampfire":
-                    Utils.sendContext("Event", " Player stopped sleeping at the campfire");
-                    break;
                 case "PlayerEscapedTimeLoop":
-                    Utils.sendContext("Event", "Player escaped the time loop");
+                    Utils.sendContext("Events", "Player escaped the time loop");
                     break;
-
             }
         }
     }
