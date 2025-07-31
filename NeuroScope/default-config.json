@@ -61,9 +61,9 @@
         "Disabled"
       ]
     },
-    "Events": {
+    "Misc": {
       "type": "selector",
-      "value": "Enabled",
+      "value": "Enabled (Silent)",
       "options": [
         "Enabled",
         "Enabled (Silent)",

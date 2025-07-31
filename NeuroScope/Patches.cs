@@ -163,9 +163,33 @@ namespace NeuroScope
                     Utils.sendContext("Location", "[LOCATION] Player entered a Black Hole");
                     break;
                 case "PlayerEscapedTimeLoop":
-                    Utils.sendContext("Events", "Player escaped the time loop");
+                    Utils.sendContext("Death", "Player escaped the time loop");
                     break;
             }
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(Campfire), nameof(Campfire.StartRoasting))]
+        public static void Campfire_StartRoasting_Postfix()
+        {
+            Utils.sendContext("Misc", $"Player started roasting a marchmallow");
+        }
+
+        [HarmonyPrefix, HarmonyPatch(typeof(Marshmallow), nameof(Marshmallow.Eat))]
+        public static void Marshmallow_Eat_Prefix(Marshmallow __instance)
+        {
+            Utils.sendContext("Misc", $"Player ate a {(__instance.IsBurned() ? "burned " : "")}marshmallow");
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(Campfire), nameof(Campfire.StartSleeping))]
+        public static void Campfire_StartSleeping_Postfix()
+        {
+            Utils.sendContext("Misc", $"Player started sleeping at a campfire");
+        }
+        
+        [HarmonyPostfix, HarmonyPatch(typeof(SurveyorProbe), nameof(SurveyorProbe.Launch))]
+        public static void SurveyorProbe_Launch_Postfix()
+        {
+            Utils.sendContext("Misc", $"Player launched a surveyor probe");
         }
     }
 }
