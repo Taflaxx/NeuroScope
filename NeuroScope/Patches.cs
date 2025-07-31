@@ -63,14 +63,14 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.WakeUp))]
         public static void PlayerCameraEffectController_WakeUp_Postfix()
         {
-            Utils.sendContext("Death", $"You woke up");
+            Utils.sendContext("Death", $"Player woke up");
             NeuroActionHandler.RegisterActions(new GetPlayerStatusAction(), new GetShipStatusAction());
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.OnPlayerDeath))]
         public static void PlayerCameraEffectController_OnPlayerDeath_Postfix(DeathType deathType)
         {
-            Utils.sendContext("Death", $"You died{(deathType.Equals(DeathType.Default) ? "" : $" - Cause: {deathType}")}");
+            Utils.sendContext("Death", $"Player died{(deathType.Equals(DeathType.Default) ? "" : $" - Cause: {deathType}")}");
 
             // Unregister all Actions
             NeuroActionHandler.UnregisterActions("dialogue_option");
@@ -153,6 +153,25 @@ namespace NeuroScope
                 case "PlayerExitQuantumMoon":
                     Utils.sendContext("Location", "[LOCATION] Player left the Quantum Moon");
                     break;
+                case "PlayerEnterBlackHole":
+                    Utils.sendContext("Location", "[LOCATION] Player entered a Black Hole");
+                    break;
+                case "EnterRoastingMode":
+                    Utils.sendContext("Event", "Player started roasting marshmallows");
+                    break;
+                case "ExitRoastingMode":
+                    Utils.sendContext("Event", "Player stopped roasting marshmallows");
+                    break;
+                case "StartSleepingAtCampfire":
+                    Utils.sendContext("Event", "Player started sleeping at the campfire");
+                    break;
+                case "StopSleepingAtCampfire":
+                    Utils.sendContext("Event", " Player stopped sleeping at the campfire");
+                    break;
+                case "PlayerEscapedTimeLoop":
+                    Utils.sendContext("Event", "Player escaped the time loop");
+                    break;
+
             }
         }
     }
