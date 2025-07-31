@@ -70,7 +70,13 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(PlayerCameraEffectController), nameof(PlayerCameraEffectController.OnPlayerDeath))]
         public static void PlayerCameraEffectController_OnPlayerDeath_Postfix(DeathType deathType)
         {
-            Utils.sendContext("Death", $"Player died{(deathType.Equals(DeathType.Default) ? "" : $" - Cause: {deathType}")}");
+            string cause = $" - Cause: {deathType}";
+            // Don't spoil the supernova in the first 10 loops
+            if (deathType.Equals(DeathType.Default) || (deathType.Equals(DeathType.Supernova) && TimeLoop.GetLoopCount() <= 10))
+            {
+                cause = "";
+            }
+            Utils.sendContext("Death", $"Player died{cause}");
 
             // Unregister all Actions
             NeuroActionHandler.UnregisterActions("dialogue_option");
