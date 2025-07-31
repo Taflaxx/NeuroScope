@@ -12,7 +12,7 @@ namespace NeuroScope
 
         private static float _lastSignalTime = -10f;
         private static AudioSignal _lastSignal = null;
-        
+
         /// <summary>
         /// This finalizer makes sure that any exceptions in the CharacterDialogueTree.DisplayDialogueBox2 Patch are suppressed.
         /// Otherwise, the dialogue would get stuck and the game would need to be restarted.
@@ -99,6 +99,7 @@ namespace NeuroScope
         [HarmonyPrefix, HarmonyPatch(typeof(Sector), nameof(Sector.OnEntry))]
         public static void Sector_OnEntry_Prefix(Sector __instance, GameObject hitObj)
         {
+            if (__instance._name == Sector.Name.QuantumMoon) return; // Prevent spoiling the Quantum Moon
             SectorDetector component = hitObj.GetComponent<SectorDetector>();
             if (component == null) return;
             if (component.GetOccupantType() != DynamicOccupant.Player) return;
@@ -111,6 +112,7 @@ namespace NeuroScope
         public static void Sector_OnExit_Prefix(Sector __instance, GameObject hitObj)
         {
             if (PlayerState.IsDead()) return;
+            if (__instance._name == Sector.Name.QuantumMoon) return; // Prevent spoiling the Quantum Moon
             SectorDetector component = hitObj.GetComponent<SectorDetector>();
             if (component == null) return;
             if (component.GetOccupantType() != DynamicOccupant.Player) return;
@@ -138,6 +140,20 @@ namespace NeuroScope
             Utils.sendContext("Signalscope", $"[SIGNALSCOPE] Listening to Signal: '{text}' | Distance: {Mathf.Round(strongestSignal.GetDistanceFromScope())}m | Frequency: '{AudioSignal.FrequencyToString(strongestSignal._frequency, false)}'");
             _lastSignalTime = Time.time;
             _lastSignal = strongestSignal;
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(GlobalMessenger), nameof(GlobalMessenger.FireEvent))]
+        public static void GlobalMessenger_FireEvent_Postfix(string eventType)
+        {
+            switch (eventType)
+            {
+                case "PlayerEnterQuantumMoon":
+                    Utils.sendContext("Location", "[LOCATION] Player entered the Quantum Moon");
+                    break;
+                case "PlayerExitQuantumMoon":
+                    Utils.sendContext("Location", "[LOCATION] Player left the Quantum Moon");
+                    break;
+            }
         }
     }
 }
