@@ -91,5 +91,18 @@ namespace NeuroScope
                     return null;
             }
         }
+
+        public static void updateSurveyProbeLights()
+        {
+            foreach (SurveyorProbe probe in NeuroScope.surveyorProbes)
+            {
+                if (probe == null) continue;
+                foreach (OWLight2 light in probe.GetLights())
+                {
+                    light._light.color = NeuroScope.surveyorProbeColor;
+                    light.SetIntensity(NeuroScope.surveyorProbeIntensity);
+                }
+            }
+        }
     }
 }
