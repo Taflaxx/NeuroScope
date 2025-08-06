@@ -18,8 +18,8 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.LaunchProbe))]
         public static void ProbeLauncher_LaunchProbe_Postfix(ProbeLauncher __instance)
         {
-            // Notify Neuro of the probe launch if manual control is enabled
-            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher")) return;
+            // Notify Neuro of the probe launch even if her actions are disabled
+            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
             probeLauncher = __instance;
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout launcher launched a surveyor probe"));
         }
@@ -29,8 +29,8 @@ namespace NeuroScope
         {
             NeuroActionHandler.UnregisterActions("take_scout_photo", "retrieve_scout", "spin_scout", "turn_scout_camera");
 
-            // Notify Neuro of the probe retrieval if manual control is enabled
-            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher")) return;
+            // Notify Neuro of the probe retrieval even if her actions are disabled
+            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
             probeLauncher = null;
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout retrieved"));
         }
@@ -38,31 +38,20 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(SurveyorProbe), nameof(SurveyorProbe.Awake))]
         public static void SurveyorProbe_Awake_Postfix(SurveyorProbe __instance)
         {
-            if (!NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher")) return;
+            if (!NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
             if (surveyorProbes.Count == 0) NeuroActionHandler.RegisterActions(new SetScoutColorAction());
             surveyorProbes.Add(__instance);
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.AllowLaunchMode))]
-        [HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.InPhotoMode))]
-        public static bool ProbeLauncher_AllowLaunchMode_Prefix(ref bool __result)
-        {
-            // Prevent manual probe control
-            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher"))
-            {
-                __result = false;
-                return false;
-            }
-            return true;
-        }
-
-        [HarmonyPrefix, HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.UpdatePostLaunch))]
+        [HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.UpdatePostLaunch))]
+        [HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.UpdatePreLaunch))]
         [HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.InPhotoMode))]
         public static bool ProbeLauncher_UpdatePostLaunch_Prefix()
         {
             // Prevent manual probe control
-            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher"))
+            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)") &&
+                !NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Manual Control)"))
             {
                 return false;
             }
@@ -72,7 +61,7 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.EquipTool))]
         public static void SurveyorProbe_EquipTool_Postfix(ProbeLauncher __instance)
         {
-            if (!NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher")) return;
+            if (!NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
             probeLauncher = __instance;
             NeuroActionHandler.RegisterActions(new LauchScoutAction());
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout launcher equipped."));
@@ -81,7 +70,7 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.UnequipTool))]
         public static void SurveyorProbe_UnequipTool_Postfix(ProbeLauncher __instance)
         {
-            if (!NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher")) return;
+            if (!NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
             probeLauncher = __instance;
             NeuroActionHandler.UnregisterActions("launch_scout");
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout launcher unequipped."));
