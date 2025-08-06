@@ -18,19 +18,18 @@ namespace NeuroScope
         [HarmonyPostfix, HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.LaunchProbe))]
         public static void ProbeLauncher_LaunchProbe_Postfix(ProbeLauncher __instance)
         {
-            // Notify Neuro of the probe launch even if her actions are disabled
-            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
+            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)"))
+            {
+                NeuroActionHandler.RegisterActions(new TakeScoutPhotoAction(), new RetrieveScoutAction(), new SpinScoutAction(), new TurnScoutCameraAction());
+            }
             probeLauncher = __instance;
-            NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout launcher launched a surveyor probe"));
+            NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout launcher launched a scout"));
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.RetrieveProbe))]
         public static void ProbeLauncher_RetrieveProbe_Postfix()
         {
             NeuroActionHandler.UnregisterActions("take_scout_photo", "retrieve_scout", "spin_scout", "turn_scout_camera");
-
-            // Notify Neuro of the probe retrieval even if her actions are disabled
-            if (NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
             probeLauncher = null;
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout retrieved"));
         }
@@ -46,7 +45,6 @@ namespace NeuroScope
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.UpdatePostLaunch))]
         [HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.UpdatePreLaunch))]
-        [HarmonyPatch(typeof(ProbeLauncher), nameof(ProbeLauncher.InPhotoMode))]
         public static bool ProbeLauncher_UpdatePostLaunch_Prefix()
         {
             // Prevent manual probe control

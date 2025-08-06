@@ -113,6 +113,7 @@ namespace NeuroScope
 
             for (int i = 1; i <= steps; i++)
             {
+                if (!surveyorProbe.IsAnchored()) return; // Handles retrieval during rotation
                 if (direction == "left" || direction == "right") {
                     rotatingCamera.RotateHorizontal(rotationStep);
                 } else {
