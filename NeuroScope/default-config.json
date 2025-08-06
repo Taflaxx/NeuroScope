@@ -88,8 +88,8 @@
         "Disabled"
       ]
     },
-    "Survey Probe": {
-      "tooltip": "Enables Neuro to use the survey probe",
+    "Scout Launcher": {
+      "tooltip": "Enables Neuro to use the scout launcher",
       "type": "toggle",
       "value": true
     }

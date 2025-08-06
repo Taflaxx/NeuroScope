@@ -1,8 +1,6 @@
-using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
+using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace NeuroScope
 {
@@ -94,15 +92,36 @@ namespace NeuroScope
 
         public static void updateSurveyProbeLights()
         {
-            foreach (SurveyorProbe probe in SurveyProbePatches.surveyorProbes)
+            foreach (SurveyorProbe probe in ScoutPatches.surveyorProbes)
             {
                 if (probe == null) continue;
                 foreach (OWLight2 light in probe.GetLights())
                 {
-                    light._light.color = SurveyProbePatches.surveyorProbeColor;
-                    light.SetIntensity(SurveyProbePatches.surveyorProbeIntensity);
+                    light._light.color = ScoutPatches.surveyorProbeColor;
+                    light.SetIntensity(ScoutPatches.surveyorProbeIntensity);
                 }
             }
         }
+        public static async UniTask turnSurveyorProbe(SurveyorProbe surveyorProbe, string direction, int steps)
+        {
+            float rotationStep = (direction == "left" || direction == "up") ? -30f : 30f;
+            NeuroScope.Instance.ModHelper.Console.WriteLine($"Turning surveyor probe {direction} by {steps} steps ({rotationStep * steps} degrees).");
+            float duration = 2f * ((float)steps / 12f); // Full rotation should take 2 seconds
+            var rotatingCamera = surveyorProbe.GetRotatingCamera();
+
+            float stepDuration = duration / steps;
+
+            for (int i = 1; i <= steps; i++)
+            {
+                if (direction == "left" || direction == "right") {
+                    rotatingCamera.RotateHorizontal(rotationStep);
+                } else {
+                    rotatingCamera.RotateVertical(rotationStep);
+                }
+
+                ScoutPatches.probeLauncher.TakeSnapshotWithCamera(rotatingCamera);
+                await UniTask.Delay((int)(stepDuration * 1000));
+            }
+        } 
     }
 }

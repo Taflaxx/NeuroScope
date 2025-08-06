@@ -6,11 +6,11 @@ using NeuroSdk.Json;
 using NeuroSdk.Websocket;
 using UnityEngine;
 
-public class SetSurveyProbeColor : NeuroAction
+public class SetScoutColorAction : NeuroAction
 {
-    public override string Name => "set_survey_probe_color";
+    public override string Name => "set_scout_light_color";
 
-    protected override string Description => "Set the color in hex format (#RRGGBB) and optional brightness from 0 to 5 (default: 1) of the survey probe lights.";
+    protected override string Description => "Set the color in hex format (#RRGGBB) and optional brightness from 0 to 5 (default: 1) of the scout's lights.";
 
     protected override JsonSchema Schema => new()
         {
@@ -32,9 +32,9 @@ public class SetSurveyProbeColor : NeuroAction
         if (intensity < 0 || intensity > 5)
             return ExecutionResult.Failure("Brightness must be between 0 and 5.");
 
-        NeuroScope.SurveyProbePatches.surveyorProbeColor = color;
-        NeuroScope.SurveyProbePatches.surveyorProbeIntensity = intensity;
-        return ExecutionResult.Success("Survey probe lights updated successfully.");
+        NeuroScope.ScoutPatches.surveyorProbeColor = color;
+        NeuroScope.ScoutPatches.surveyorProbeIntensity = intensity;
+        return ExecutionResult.Success("Scout's lights updated successfully.");
     }
 
     protected override async UniTask ExecuteAsync()
