@@ -94,13 +94,13 @@ namespace NeuroScope
 
         public static void updateSurveyProbeLights()
         {
-            foreach (SurveyorProbe probe in NeuroScope.surveyorProbes)
+            foreach (SurveyorProbe probe in SurveyProbePatches.surveyorProbes)
             {
                 if (probe == null) continue;
                 foreach (OWLight2 light in probe.GetLights())
                 {
-                    light._light.color = NeuroScope.surveyorProbeColor;
-                    light.SetIntensity(NeuroScope.surveyorProbeIntensity);
+                    light._light.color = SurveyProbePatches.surveyorProbeColor;
+                    light.SetIntensity(SurveyProbePatches.surveyorProbeIntensity);
                 }
             }
         }

@@ -87,6 +87,11 @@
         "Enabled (Silent)",
         "Disabled"
       ]
+    },
+    "Survey Probe": {
+      "tooltip": "Enables Neuro to use the survey probe",
+      "type": "toggle",
+      "value": true
     }
   }
 }

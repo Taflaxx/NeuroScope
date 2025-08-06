@@ -9,9 +9,6 @@ namespace NeuroScope;
 public class NeuroScope : OWML.ModHelper.ModBehaviour
 {
 	public static NeuroScope Instance;
-	public static HashSet<SurveyorProbe> surveyorProbes = new();
-	public static Color surveyorProbeColor = Color.white;
-	public static int surveyorProbeIntensity = 1;
 
 	public void Awake()
 	{

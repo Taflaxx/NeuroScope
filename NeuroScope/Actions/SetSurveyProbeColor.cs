@@ -32,8 +32,8 @@ public class SetSurveyProbeColor : NeuroAction
         if (intensity < 0 || intensity > 5)
             return ExecutionResult.Failure("Brightness must be between 0 and 5.");
 
-        NeuroScope.NeuroScope.surveyorProbeColor = color;
-        NeuroScope.NeuroScope.surveyorProbeIntensity = intensity;
+        NeuroScope.SurveyProbePatches.surveyorProbeColor = color;
+        NeuroScope.SurveyProbePatches.surveyorProbeIntensity = intensity;
         return ExecutionResult.Success("Survey probe lights updated successfully.");
     }
 

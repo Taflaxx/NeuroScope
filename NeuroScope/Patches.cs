@@ -187,21 +187,5 @@ namespace NeuroScope
         {
             Utils.sendContext("Misc", $"Player started sleeping at a campfire");
         }
-
-        [HarmonyPostfix, HarmonyPatch(typeof(SurveyorProbe), nameof(SurveyorProbe.Launch))]
-        public static void SurveyorProbe_Launch_Postfix()
-        {
-            Utils.sendContext("Misc", $"Player launched a surveyor probe");
-        }
-
-        [HarmonyPostfix, HarmonyPatch(typeof(SurveyorProbe), nameof(SurveyorProbe.Awake))]
-        public static void SurveyorProbe_Awake_Postfix(SurveyorProbe __instance)
-        {
-            if (NeuroScope.surveyorProbes.Count == 0) NeuroActionHandler.RegisterActions(new SetSurveyProbeColor());
-            NeuroScope.surveyorProbes.Add(__instance);
-            NeuroScope.Instance.ModHelper.Console.WriteLine($"SurveyorProbe Awake called. Current probes: {string.Join(", ", NeuroScope.surveyorProbes.Select(p => p.name))}");
-
-            Utils.updateSurveyProbeLights();
-        }
     }
 }
