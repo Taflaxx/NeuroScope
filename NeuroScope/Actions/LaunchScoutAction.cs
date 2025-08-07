@@ -24,6 +24,7 @@ public class LauchScoutAction : NeuroAction
     protected override async UniTask ExecuteAsync()
     {
         NeuroScope.ScoutPatches.probeLauncher.LaunchProbe();
+        NeuroActionHandler.UnregisterActions("launch_scout");
         await UniTask.CompletedTask;
     }
 }

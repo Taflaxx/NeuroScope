@@ -30,8 +30,8 @@ namespace NeuroScope
         public static void ProbeLauncher_RetrieveProbe_Postfix()
         {
             NeuroActionHandler.UnregisterActions("take_scout_photo", "retrieve_scout", "spin_scout", "turn_scout_camera");
-            probeLauncher = null;
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout retrieved"));
+            if (probeLauncher.IsEquipped()) NeuroActionHandler.RegisterActions(new LauchScoutAction());
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(SurveyorProbe), nameof(SurveyorProbe.Awake))]
@@ -69,7 +69,6 @@ namespace NeuroScope
         public static void SurveyorProbe_UnequipTool_Postfix(ProbeLauncher __instance)
         {
             if (!NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
-            probeLauncher = __instance;
             NeuroActionHandler.UnregisterActions("launch_scout");
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout launcher unequipped."));
         }

@@ -23,17 +23,25 @@ public class TakeScoutPhotoAction : NeuroAction<SurveyorProbe>
             return ExecutionResult.Failure("Scout launcher is not equipped.");
         }
 
-        realSurveyorProbe = NeuroScope.ScoutPatches.probeLauncher.GetActiveProbe();
-        if (realSurveyorProbe == null || !realSurveyorProbe.IsAnchored())
+        realSurveyorProbe = Locator.GetProbe();
+        if (realSurveyorProbe == null || !realSurveyorProbe.IsLaunched())
         {
-            return ExecutionResult.Failure("Scout not found or not anchored. Please wait until the scout has landed after launching it before trying to spin it.");
+            return ExecutionResult.Failure("Scout not found.");
         }
         return ExecutionResult.Success();
     }
 
     protected override async UniTask ExecuteAsync(SurveyorProbe surveyorProbe)
     {
-        NeuroScope.ScoutPatches.probeLauncher.TakeSnapshotWithCamera(surveyorProbe.GetRotatingCamera());
+        if (surveyorProbe.IsAnchored())
+        {
+            NeuroScope.ScoutPatches.probeLauncher.TakeSnapshotWithCamera(surveyorProbe.GetRotatingCamera());
+        }
+        else
+        {
+            NeuroScope.ScoutPatches.probeLauncher.TakeSnapshotWithCamera(surveyorProbe.GetForwardCamera());
+        }
+        
         await UniTask.CompletedTask;
     }
 }

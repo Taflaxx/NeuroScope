@@ -26,6 +26,10 @@ public class TurnScoutCameraAction : NeuroAction<ActionJData>
     protected override ExecutionResult Validate(ActionJData actionData, out ActionJData actionDataOut)
     {
         actionDataOut = actionData;
+        if (Locator.GetProbe() == null || !Locator.GetProbe().IsAnchored())
+        {
+            return ExecutionResult.Failure("Scout not found or not anchored. Please wait until the probe has landed after launching it before trying to turn the camera.");
+        }
         string direction = actionData.Data?["direction"]?.Value<string>();
         if (string.IsNullOrEmpty(direction) || !new List<string> { "left", "right", "up", "down" }.Contains(direction))
         {
