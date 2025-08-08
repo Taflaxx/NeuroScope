@@ -10,10 +10,7 @@ public class LauchScoutAction : NeuroAction
 
     protected override string Description => "Use the scout launcher to launch a scout.";
 
-    protected override JsonSchema Schema => new()
-        {
-            Type = JsonSchemaType.Object,
-        };
+    protected override JsonSchema Schema => new();
 
     protected override ExecutionResult Validate(ActionJData actionData)
     {

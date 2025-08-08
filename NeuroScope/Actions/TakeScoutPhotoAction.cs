@@ -9,12 +9,7 @@ public class TakeScoutPhotoAction : NeuroAction<SurveyorProbe>
     public override string Name => "take_scout_photo";
 
     protected override string Description => "Take a photo with the scout launched from the scout launcher.";
-
-    protected override JsonSchema Schema => new()
-    {
-        Type = JsonSchemaType.Object,
-    };
-
+    protected override JsonSchema Schema => new();
     protected override ExecutionResult Validate(ActionJData actionData, out SurveyorProbe realSurveyorProbe)
     {
         realSurveyorProbe = null;

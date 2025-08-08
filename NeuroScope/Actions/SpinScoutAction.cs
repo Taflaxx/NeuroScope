@@ -10,12 +10,7 @@ public class SpinScoutAction : NeuroAction<SurveyorProbe>
     public override string Name => "spin_scout";
 
     protected override string Description => "Spin the scout.";
-
-    protected override JsonSchema Schema => new()
-    {
-        Type = JsonSchemaType.Object,
-    };
-
+    protected override JsonSchema Schema => new();
     protected override ExecutionResult Validate(ActionJData actionData, out SurveyorProbe realSurveyorProbe)
     {
         realSurveyorProbe = Locator.GetProbe();
