@@ -21,6 +21,7 @@ namespace NeuroScope
             {
                 NeuroActionHandler.RegisterActions(new TakeScoutPhotoAction(), new RetrieveScoutAction(), new SpinScoutAction(), new TurnScoutCameraAction());
             }
+            NeuroActionHandler.UnregisterActions("launch_scout");
             probeLauncher = __instance;
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout launcher launched a scout"));
         }
@@ -60,7 +61,7 @@ namespace NeuroScope
         {
             if (!NeuroScope.Instance.ModHelper.Config.GetSettingsValue<bool>("Scout Launcher (Neuro)")) return;
             probeLauncher = __instance;
-            NeuroActionHandler.RegisterActions(new LauchScoutAction());
+            if (__instance.GetActiveProbe() == null) NeuroActionHandler.RegisterActions(new LauchScoutAction());
             NeuroSdk.Messages.Outgoing.Context.Send(Utils.stripHtml("Scout launcher equipped."));
         }
 

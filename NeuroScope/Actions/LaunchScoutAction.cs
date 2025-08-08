@@ -15,13 +15,13 @@ public class LauchScoutAction : NeuroAction
     protected override ExecutionResult Validate(ActionJData actionData)
     {
         if (NeuroScope.ScoutPatches.probeLauncher == null) return ExecutionResult.Failure("Scout launcher is not equipped.");
+        if (NeuroScope.ScoutPatches.probeLauncher.GetActiveProbe() != null) return ExecutionResult.Failure("Scout is already launched. Please retrieve it before launching a new one.");
         return ExecutionResult.Success("Scout launched.");
     }
 
     protected override async UniTask ExecuteAsync()
     {
         NeuroScope.ScoutPatches.probeLauncher.LaunchProbe();
-        NeuroActionHandler.UnregisterActions("launch_scout");
         await UniTask.CompletedTask;
     }
 }
