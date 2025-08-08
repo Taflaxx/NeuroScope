@@ -96,7 +96,7 @@
     "Scout Launcher (Manual Control)": {
       "tooltip": "Enables the player to use the scout launcher alongside Neuro",
       "type": "toggle",
-      "value": false
+      "value": true
     }
   }
 }
