@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using UnityEngine;
 using Cysharp.Threading.Tasks;
 
 namespace NeuroScope
@@ -99,6 +98,12 @@ namespace NeuroScope
                 {
                     light._light.color = ScoutPatches.surveyorProbeColor;
                     light.SetIntensity(ScoutPatches.surveyorProbeIntensity);
+
+                    foreach (ProbeLantern lantern in probe.GetComponentsInChildren<ProbeLantern>())
+                    {
+                        if (lantern._emissiveRenderer == null) continue;
+                        lantern._emissiveRenderer._renderer.sharedMaterial.SetColor(OWRenderer.s_propID_EmissionColor, ScoutPatches.surveyorProbeColor);
+                    }
                 }
             }
         }
