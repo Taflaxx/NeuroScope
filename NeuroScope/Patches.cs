@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -37,19 +38,12 @@ namespace NeuroScope
             {
                 NeuroActionHandler.UnregisterActions("dialogue_option");
             }
-
-            // If there are no DialogueOptions we can just send the text as Context
-            if (!__result._displayedOptions.Any())
-            {
-                Utils.sendContext("Dialogue", Utils.getText(__instance));
-                return;
-            }
-
-            // If there are DialogueOptions, let Neuro choose an option
-            ActionWindow.Create(__result._optionBox)
-                .SetForce(NeuroScope.Instance.ModHelper.Config.GetSettingsValue<int>("Dialogue Force Timer"), "Select a dialogue option.", "", false)
-                .AddAction(new Actions.CharacterDialogueOptionAction(__instance, __result))
-                .Register();
+            
+            Utils.sendContext("Dialogue", Utils.getText(__instance));
+            if (!__result._displayedOptions.Any()) return;
+            
+            String optionsText = string.Join("\n", __result._displayedOptions.Select(option => Utils.stripHtml(option._text)));
+            Utils.sendContext("Dialogue", $"[DIALOGUE] You can respond to {TextTranslation.Translate(__instance._characterName)} with the following options:\n" + optionsText);
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(NomaiText), nameof(NomaiText.SetAsTranslated))]
