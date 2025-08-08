@@ -18,7 +18,7 @@ public class SpinScoutAction : NeuroAction<SurveyorProbe>
         {
             return ExecutionResult.Failure("Scout not found or not anchored. Please wait until the probe has landed after launching it before trying to spin it.");
         }
-        return ExecutionResult.Success();
+        return ExecutionResult.Success("Scout is spinning.");
     }
 
     protected override async UniTask ExecuteAsync(SurveyorProbe surveyorProbe)

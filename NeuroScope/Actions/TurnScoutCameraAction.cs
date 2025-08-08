@@ -40,7 +40,7 @@ public class TurnScoutCameraAction : NeuroAction<ActionJData>
         {
             return ExecutionResult.Failure("Action failed. Amount must be between 1 and 12.");
         }
-        return ExecutionResult.Success();
+        return ExecutionResult.Success($"Turned scout camera {direction}.");
 
     }
 

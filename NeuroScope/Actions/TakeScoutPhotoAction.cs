@@ -23,7 +23,7 @@ public class TakeScoutPhotoAction : NeuroAction<SurveyorProbe>
         {
             return ExecutionResult.Failure("Scout not found.");
         }
-        return ExecutionResult.Success();
+        return ExecutionResult.Success("Took a photo with the scout.");
     }
 
     protected override async UniTask ExecuteAsync(SurveyorProbe surveyorProbe)
