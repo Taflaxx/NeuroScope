@@ -41,9 +41,9 @@ namespace NeuroScope
             
             Utils.sendContext("Dialogue", Utils.getText(__instance));
             if (!__result._displayedOptions.Any()) return;
-            
+
             String optionsText = string.Join("\n", __result._displayedOptions.Select(option => Utils.stripHtml(option._text)));
-            Utils.sendContext("Dialogue", $"[DIALOGUE] You can respond to {TextTranslation.Translate(__instance._characterName)} with the following options:\n" + optionsText);
+            Utils.sendContext("Dialogue", $"[DIALOGUE] You can respond to {(__instance._characterName == "" ? "the NPC" : TextTranslation.Translate(__instance._characterName))} with the following options:\n" + optionsText);
         }
 
         [HarmonyPrefix, HarmonyPatch(typeof(NomaiText), nameof(NomaiText.SetAsTranslated))]
