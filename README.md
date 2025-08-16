@@ -1,5 +1,9 @@
 # NeuroScope
 
+> [!CAUTION]
+> This mod has been merged into [NeuroPilot](https://github.com/Hawkbat/NeuroPilot) and will no longer be updated/maintained
+
+
 NeuroScope is an Outer Wilds mod that provides real-time game context and actions to the AI Neuro-sama, making her more aware of what is happening in the game. The mod sends information about player status, ship status, dialogue, achievements, notifications, and more to Neuro using the [Neuro Game SDK](https://github.com/VedalAI/neuro-game-sdk).
 
 ## Features
